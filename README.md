@@ -16,6 +16,20 @@ You will need to install these following application in order to make this code 
 You will also need to download these following files to make it work.
 * [VM configuration](https://d17h27t6h515a5.cloudfront.net/topher/2017/August/59822701_fsnd-virtual-machine/fsnd-virtual-machine.zip)
 
+## Project contents
+
+This project consists for the following files in the `catalog` directory:
+
+* `application.py` - The main Python script that serves the website. It will create and populate a database if there is not any. It also handles all JSON and HTML endpoint of item catalog including OAuth. 
+* `client_secrets.json` - Client secrets for Google OAuth login.
+* `README.md` - This read me file.
+* `/catalog` - Directory containing the `catalog` package.
+    * `/static` - Directory containing CSS and Javascript for the website. It includes google material design lite components.
+    * `/templates` - HTML template for a web application. 
+    * `connect_database.py` - Function for connecting to the item catalog database.
+    * `database_setup.py` - Defines database classes and structure. It also creates a database and populates with initial items.
+    * `database_populate.py` - Inserts a initial of items for each category into the database.
+
 ## How to run an application
 Download the project zip file to you computer and unzip the file  or clone this repository to your desktop.
 
@@ -30,7 +44,7 @@ vagrant up
 
 The first time you run this command it will take awhile, as the VM image needs to be downloaded.
 
-You can then log into the VM with the following command:
+After images is downloaded successfully, please log into the VM with the following command:
 
 ```bash
 vagrant ssh
