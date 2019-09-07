@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+{% block title %}Login{% endblock %}
+{% block head %}
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+<script src="{{ url_for('static', filename='js/js.cookie-2.0.4.min.js') }}"></script>
+<script>
+    // Setup AJAX to add the Cross Site Request Forgery token to requests
+    var csrfToken = Cookies.get('_csrf_token');
+    $.ajaxSetup({
+        beforeSend: function (xhr) {
+            // Only add the CSRF token if it is
+            // being sent to the same domain this script is on.
+            if (!this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrfToken);
+            }
+        }
+    });
+</script>
+<script>
+    function start() {
+        gapi.load('auth2', function () {
+            auth2 = gapi.auth2.init();
+        });
+    }
+</script>
+<meta name="google-signin-client_id" content="643293914545-5vm4mkujb2la9b7saj625s8dfs4jdop3.apps.googleusercontent.com">
+{% endblock head %}
+{% block content %}
+
+<h1>Login to Grocery-Catalog</h1>
+
+<div class="mdl-grid">
+    <div
+        class="Grocery-Catalog-card-login Grocery-Catalog-card-login-g mdl-card mdl-cell mdl-cell--12-col mdl-cell--2-col-tablet mdl-shadow--2dp">
+        <div class="mdl-card__title mdl-card--expand">
+            <h4>
+                Login with your Google account
+            </h4>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <button id="signinButton"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect google-login-button">Login with
+                Google</button>
+            <div class="mdl-layout-spacer"></div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="mdl-grid">
+    <div id="result"></div>
+</div>
+
+<!-- Google Login script -->
+<script>
+    $('#signinButton').click(function () {
+        function signInCallback(authResult) {
+            if (authResult['code']) {
+                // Hide the sign-in button now that the user is authenticated.
+                $('#signinButton').attr('style', 'display: none');
+
+                // Send the one-time-use code to the server, if the server
+                // responds, write a 'login successful' message to the web page
+                // and then redirect back to the main restaurants page
+                $.ajax({
+                    type: 'POST',
+                    url: '/gconnect?state={{STATE}}',
+                    processData: false,
+                    contentType: 'application/octet-stream; charset=utf-8',
+                    data: authResult['code'],
+                    success: function (result) {
+                        if (result) {
+                            $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
+                            setTimeout(function () {
+                                window.location.href = "/";
+                            }, 4000);
+                        } else if (authResult['error']) {
+                            console.log('There was an error: ' + authResult['error']);
+                        } else {
+                            $('#result').html('Faild to make a server side call. Check you configuation and console');
+                        }
+
+                    }
+                });
+            }
+        }
+        auth2.grantOfflineAccess().then(signInCallback);
+    });
+</script>
+
+{% endblock content %}

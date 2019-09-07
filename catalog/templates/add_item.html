@@ -1,0 +1,10 @@
+{% if 'username' in session %}
+<a id="tt1"
+    class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--fab mdl-button--colored Grocery-Catalog-add-item_button"
+    href="{{ url_for('create_item') }}">
+    <i class="material-icons">add new item</i>
+</a>
+<div class="mdl-tooltip mdl-tooltip" for="tt1">
+    Add new item
+</div>
+{% endif %}
