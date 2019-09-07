@@ -15,8 +15,6 @@ from sqlalchemy.orm import relationship
 Base = declarative_base()
 
 # Create user table to store user information
-
-
 class User(Base):
     """Setup a database table of registered users.
 
@@ -33,8 +31,6 @@ class User(Base):
     email = Column(String(100), nullable=False)
 
 # Create catagory table to store different categories of Item Catalog
-
-
 class Category(Base):
     """Define a database table of categories that an item will belong to.
 
@@ -61,8 +57,6 @@ class Category(Base):
         }
 
 # Create Item table to store item information
-
-
 class Item(Base):
     """Define a database table of items.
 
@@ -98,8 +92,7 @@ class Item(Base):
             'description': self.description
         }
 
-
-def create_db(database_url):
-    engine = create_engine(database_url)
+def create_db():
+    engine = create_engine('sqlite:///itemcatalog.db')
     Base.metadata.create_all(engine)
     print "Database created successfully!"

@@ -30,7 +30,6 @@
                     </div>
 
                 <br>
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
                     <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="Save">
                     {% for category in categories if item.category_id == category.id %}
                         <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--grey-300 Grocery-Catalog-cancel-button" href="{{ url_for('show_item', category_name=category.name, item_name=item.name) }}">Cancel</a>

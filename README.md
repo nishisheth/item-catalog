@@ -2,8 +2,6 @@
 
 This application provides a list of items within a variety of categories as well as provide a user authentication system. Users will have the ability to add, edit and delete their own items.
 
-The app uses the Flask plugin SeaSurf, in order to protect against cross-site request forgery.
-
 ## Getting Started
 * You can *[clone](https://github.com/arrickx/Item-Catalog-Application.git)* or *[download](https://github.com/arrickx/Item-Catalog-Application.git)* this project via [GitHub](https://github.com) to your local machine.
 

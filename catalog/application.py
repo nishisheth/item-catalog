@@ -13,7 +13,6 @@ from database_populate import database_populate
 from connect_database import connect_database
 from flask import Flask
 from flask import session as login_session
-from flask_seasurf import SeaSurf
 from database_setup import Category, Item, User
 from sqlalchemy import desc, literal
 from flask import request, render_template, redirect, url_for, flash, jsonify
@@ -28,7 +27,6 @@ from flask import make_response
 import requests
 
 app = Flask(__name__)
-csrf = SeaSurf(app)
 
 # Login - Show the login screen to the user.
 @app.route('/login')
@@ -132,8 +130,6 @@ def gconnect():
     return output
 
 # Google Auth disconnet
-
-
 def gdisconnect():
     """Revoke a current user's token and reset their login session."""
     access_token = login_session.get('access_token')
@@ -159,7 +155,6 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-
 # Logout - Removes google auth tokens from session
 @app.route('/logout')
 def logout():
@@ -181,8 +176,6 @@ def logout():
         return redirect(url_for('show_homepage'))
 
 # Creates a new user in the database
-
-
 def create_user():
     new_user = User(name=login_session['username'],
                     email=login_session['email'])
@@ -194,8 +187,6 @@ def create_user():
     return user.id
 
 # Retruns userId from email address
-
-
 def get_user_id(email):
     session = connect_database()
     try:
@@ -259,7 +250,6 @@ def show_my_items():
                            categories=categories,
                            items=items)
 
-
 @app.route('/catalog/<category_name>/<item_name>/')
 def show_item(category_name, item_name):
     """Show details of a particular item belonging to a specified category.
@@ -297,7 +287,6 @@ def show_item(category_name, item_name):
                            category=category,
                            item=item,
                            ower_name=ower_name)
-
 
 @app.route('/catalog/new/', methods=['GET', 'POST'])
 def create_item():
@@ -358,7 +347,6 @@ def create_item():
         return render_template('new_item.html',
                                categories=categories,
                                ref_category=ref_category)
-
 
 @app.route('/catalog/<category_name>/<item_name>/edit/',
            methods=['GET', 'POST'])
@@ -432,7 +420,6 @@ def edit_item(item_name, category_name=None):
                                categories=categories,
                                item=item)
 
-
 @app.route('/catalog/<item_name>/delete/', methods=['GET', 'POST'])
 def delete_item(item_name):
     """Delete a specified item from the database.
@@ -453,7 +440,7 @@ def delete_item(item_name):
         return redirect(url_for('show_homepage'))
 
     if login_session['user_id'] != item.user_id:
-        flash("You didn't add this item, so you can't delete it. Sorry :-(")
+        flash("You cannot delete other user's items")
         category = session.query(Category).filter_by(id=item.category_id).one()
         category_name = category.name
         item_name = item.name
@@ -495,7 +482,6 @@ def catalog_json():
     session.close()
     return jsonify(Category=serialised_catergories)
 
-
 @app.route('/catalog/<category_name>/<item_name>/JSON/')
 @app.route('/catalog/<item_name>/JSON/')
 def item_json(item_name, category_name=None):
@@ -517,12 +503,11 @@ def item_json(item_name, category_name=None):
     session.close()
     return jsonify(Item=item.serialise)
 
-
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
 
     if os.path.isfile('itemcatalog.db') is False:
-        create_db('sqlite:///itemcatalog.db')
+        create_db()
         database_populate()
 
     app.debug = True

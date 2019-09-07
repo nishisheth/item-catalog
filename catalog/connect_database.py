@@ -6,8 +6,6 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base
 
 # Connects to the database and returns an sqlalchemy session object
-
-
 def connect_database():
     engine = create_engine('sqlite:///itemcatalog.db')
     Base.metadata.bind = engine

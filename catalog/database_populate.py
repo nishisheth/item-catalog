@@ -3,6 +3,7 @@ This script add some items to the item catalog database.
 
 """
 from sqlalchemy import func
+
 from database_setup import User, Category, Item
 from connect_database import connect_database
 
@@ -10,7 +11,7 @@ from connect_database import connect_database
 def database_populate():
     """Populate the item catalog database some initial content."""
     session = connect_database()
-
+ 
     # Make sure the database is empty before running this inital data dump.
     category_count = session.query(func.count(Category.id)).scalar()
     if category_count > 0:
@@ -145,10 +146,10 @@ def database_populate():
     )
     session.add(ditem2)
     session.commit()
-
     session.close()
-    print "Added some items in database successfully!"
 
+    print "Added some items in database successfully!"
 
 if __name__ == '__main__':
     database_populate()
+    
