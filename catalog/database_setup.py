@@ -5,7 +5,6 @@ This script should be run first before running the main application.py.
 however, application.py will run this script automatically if no database found in current project.
 
 """
-
 from sqlalchemy import create_engine
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
@@ -96,3 +95,6 @@ def create_db():
     engine = create_engine('sqlite:///itemcatalog.db')
     Base.metadata.create_all(engine)
     print "Database created successfully!"
+
+if __name__ == '__main__':
+    create_db()

@@ -98,7 +98,7 @@ h1 {
 
 /* Set text to white on a red background. */
 .Grocery-Catalog-delete-button {
-    color: #ff4081;;
+    color: rgba(255, 255, 255, 0.97);
 }
 
 .Grocery-Catalog-login-logout-button {

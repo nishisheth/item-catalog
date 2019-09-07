@@ -3,10 +3,10 @@ This script add some items to the item catalog database.
 
 """
 from sqlalchemy import func
-
-from database_setup import User, Category, Item
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from database_setup import User, Category, Item, Base
 from connect_database import connect_database
-
 
 def database_populate():
     """Populate the item catalog database some initial content."""
