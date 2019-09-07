@@ -33,7 +33,7 @@ This project consists for the following files in the `catalog` directory:
 ## How to run an application
 Download the project zip file to you computer and unzip the file  or clone this repository to your desktop.
 
-Navigate to the project directory and then enter the `vagrant` directory.
+Navigate to the project directory. 
 
 ### Bringing the VM up
 Bring up the VM with the following command:
