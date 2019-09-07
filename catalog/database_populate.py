@@ -1,5 +1,5 @@
 """
-This script add some items to the item catalog database. 
+This script add some items to the item catalog database.
 
 """
 from sqlalchemy import func
@@ -40,25 +40,13 @@ def database_populate():
     session.commit()
 
     # Adding some items to Fruits&Veg category
-    fvitem1 = Item(
-        user=user1,
-        category=category1,
-        name="Apple Royal Gala",
-        description=(
-            "Round shaped fruit medium in size with red skin and a cream coloured flesh with a sweet flavour."
-        )
-    )
+    fvitem1 = Item(user=user1, category=category1, name="Apple Royal Gala", description=(
+        "Round shaped fruit medium in size with red skin and a cream coloured flesh with a sweet flavour."))
     session.add(fvitem1)
     session.commit()
 
-    fvitem2 = Item(
-        user=user1,
-        category=category1,
-        name="Green Seedless Grapes",
-        description=(
-            "Medium-sized, oval shaped grapes with light green skin and pale green flesh, seedless."
-        )
-    )
+    fvitem2 = Item(user=user1, category=category1, name="Green Seedless Grapes", description=(
+        "Medium-sized, oval shaped grapes with light green skin and pale green flesh, seedless."))
     session.add(fvitem2)
     session.commit()
 
@@ -142,14 +130,8 @@ def database_populate():
     session.commit()
 
     # Adding some items to Dairy category
-    ditem1 = Item(
-        user=user1,
-        category=category4,
-        name="Full Cream Milk",
-        description=(
-            "Full Cream Milk offers a better deal for farmers and helps to support them and their families."
-        )
-    )
+    ditem1 = Item(user=user1, category=category4, name="Full Cream Milk", description=(
+        "Full Cream Milk offers a better deal for farmers and helps to support them and their families."))
     session.add(ditem1)
     session.commit()
 
@@ -166,6 +148,7 @@ def database_populate():
 
     session.close()
     print "Added some items in database successfully!"
+
 
 if __name__ == '__main__':
     database_populate()

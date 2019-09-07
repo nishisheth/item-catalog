@@ -3,7 +3,7 @@
 Main Python script that starts the item catalog app.
 
 It checks to see if the database file exists and if not it creates the database
-and populates it with some sample content. 
+and populates it with some sample content.
 
 """
 import os.path
@@ -17,7 +17,8 @@ from flask_seasurf import SeaSurf
 from database_setup import Category, Item, User
 from sqlalchemy import desc, literal
 from flask import request, render_template, redirect, url_for, flash, jsonify
-import random, string
+import random
+import string
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from sqlalchemy.orm.exc import NoResultFound
@@ -41,7 +42,7 @@ def show_login():
 
     return render_template('login.html', STATE=state, categories=categories)
 
-# Google Auth endpoint 
+# Google Auth endpoint
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     """Performs app login via Google oauth."""
@@ -109,7 +110,7 @@ def gconnect():
 
     # Get user info
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
-    params = {'access_token': credentials.access_token, 'alt':'json'}
+    params = {'access_token': credentials.access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
     data = json.loads(answer.text)
 
@@ -130,12 +131,15 @@ def gconnect():
     print "User has successfully logged into app!"
     return output
 
-# Google Auth disconnet 
+# Google Auth disconnet
+
+
 def gdisconnect():
     """Revoke a current user's token and reset their login session."""
     access_token = login_session.get('access_token')
     if access_token is None:
-        response = make_response(json.dumps('Current user not connected.'), 401)
+        response = make_response(
+            json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -156,7 +160,7 @@ def gdisconnect():
         return response
 
 
-# Logout - Removes google auth tokens from session 
+# Logout - Removes google auth tokens from session
 @app.route('/logout')
 def logout():
     if 'provider' in login_session:
@@ -176,7 +180,9 @@ def logout():
         flash("You were not logged in to begin with!")
         return redirect(url_for('show_homepage'))
 
-# Creates a new user in the database 
+# Creates a new user in the database
+
+
 def create_user():
     new_user = User(name=login_session['username'],
                     email=login_session['email'])
@@ -188,6 +194,8 @@ def create_user():
     return user.id
 
 # Retruns userId from email address
+
+
 def get_user_id(email):
     session = connect_database()
     try:
@@ -198,7 +206,7 @@ def get_user_id(email):
         session.close()
         return None
 
-# Home page or default page shows the item categories and 5 latest items 
+# Home page or default page shows the item categories and 5 latest items
 @app.route('/')
 @app.route('/catalog/')
 def show_homepage():
@@ -250,6 +258,7 @@ def show_my_items():
     return render_template('user_items.html',
                            categories=categories,
                            items=items)
+
 
 @app.route('/catalog/<category_name>/<item_name>/')
 def show_item(category_name, item_name):
@@ -469,7 +478,7 @@ def delete_item(item_name):
                                categories=categories,
                                item=item)
 
-#JSON endpoints for item catalog 
+# JSON endpoints for item catalog
 @app.route('/catalog/JSON/')
 @app.route('/catalog.json/')
 def catalog_json():
@@ -485,6 +494,7 @@ def catalog_json():
     serialised_catergories = [i.serialise for i in categories]
     session.close()
     return jsonify(Category=serialised_catergories)
+
 
 @app.route('/catalog/<category_name>/<item_name>/JSON/')
 @app.route('/catalog/<item_name>/JSON/')
@@ -510,10 +520,10 @@ def item_json(item_name, category_name=None):
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
-    
+
     if os.path.isfile('itemcatalog.db') is False:
-            create_db('sqlite:///itemcatalog.db')
-            database_populate()
+        create_db('sqlite:///itemcatalog.db')
+        database_populate()
 
     app.debug = True
     app.run(host='0.0.0.0', port=8000)
