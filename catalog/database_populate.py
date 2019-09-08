@@ -47,8 +47,7 @@ def database_populate():
         user=user1,
         category=category1,
         name="Apple Royal Gala",
-        description="Round shaped fruit medium in size with red skin \
-                    and a cream coloured flesh with a sweet flavour.")
+        description="Round shaped fruit medium in size with red skin.")
     session.add(fvitem1)
     session.commit()
 
@@ -56,8 +55,7 @@ def database_populate():
         user=user1,
         category=category1,
         name="Green Seedless Grapes",
-        description="Medium-sized, oval shaped grapes with light green \
-                     skin and pale green flesh, seedless.")
+        description="Medium-sized, oval shaped grapes.")
     session.add(fvitem2)
     session.commit()
 
@@ -109,15 +107,14 @@ def database_populate():
         user=user1,
         category=category4,
         name="Full Cream Milk",
-        description="Full Cream Milk offers a better deal for farmers \
-                        and helps to support them and their families.")
+        description="Full Cream Milk 3L")
     session.add(ditem1)
     session.commit()
     ditem2 = Item(
         user=user1,
         category=category4,
         name="Skim Cream Milk",
-        description="Skim Cream Milk has less fat than full cream milk.")
+        description="Skim Cream Milk 3L")
     session.add(ditem2)
     session.commit()
 
