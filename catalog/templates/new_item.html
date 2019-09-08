@@ -5,17 +5,17 @@
 <div class="mdl-grid Grocery-Catalog-form mdl-shadow--2dp">
     <form action="{{ url_for('create_item') }}" method="post" enctype="multipart/form-data">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="text" name="name" id="name" />
+            <input class="mdl-textfield__input" type="text" name="name" id="name" required/>
             <label class="mdl-textfield__label" for="name">Item name</label>
         </div>
         <br>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <textarea class="mdl-textfield__input" name="description" rows="3" cols="30" id="description"></textarea>
+            <textarea class="mdl-textfield__input" name="description" rows="3" cols="30" id="description" required></textarea>
             <label class="mdl-textfield__label" for="description">Description</label>
         </div>
         <br>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <select class="mdl-textfield__input" name="category" id="category">
+            <select class="mdl-textfield__input" name="category" id="category" required>
                 {% for category in categories %}
                 {% if category.name == ref_category %}
                 <option value="{{ category.name }}" selected>{{ category.name }}</option>
@@ -24,7 +24,7 @@
                 {% endif %}
                 {% endfor %}
             </select>
-            <label class="mdl-textfield__label" for="category">Category</label>
+            <label class="mdl-textfield__label" for="category" required>Category</label>
         </div>
         <br>
         <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit"

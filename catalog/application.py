@@ -130,6 +130,8 @@ def gconnect():
     return output
 
 # Google Auth disconnet
+
+
 def gdisconnect():
     """Revoke a current user's token and reset their login session."""
     access_token = login_session.get('access_token')
@@ -176,6 +178,8 @@ def logout():
         return redirect(url_for('show_homepage'))
 
 # Creates a new user in the database
+
+
 def create_user():
     new_user = User(name=login_session['username'],
                     email=login_session['email'])
@@ -187,6 +191,8 @@ def create_user():
     return user.id
 
 # Retruns userId from email address
+
+
 def get_user_id(email):
     session = connect_database()
     try:
@@ -197,13 +203,13 @@ def get_user_id(email):
         session.close()
         return None
 
-# Home page or default page shows the item categories and 5 latest items
+# Home page or default page shows the item categories and 6 latest items
 @app.route('/')
 @app.route('/catalog/')
 def show_homepage():
     session = connect_database()
     categories = session.query(Category).all()
-    latest_items = session.query(Item).order_by(desc(Item.id))[0:6]
+    latest_items = session.query(Item).order_by(desc(Item.id)).limit(6)
     session.close()
     return render_template('index.html',
                            categories=categories,
@@ -250,6 +256,7 @@ def show_my_items():
                            categories=categories,
                            items=items)
 
+
 @app.route('/catalog/<category_name>/<item_name>/')
 def show_item(category_name, item_name):
     """Show details of a particular item belonging to a specified category.
@@ -287,6 +294,7 @@ def show_item(category_name, item_name):
                            category=category,
                            item=item,
                            ower_name=ower_name)
+
 
 @app.route('/catalog/new/', methods=['GET', 'POST'])
 def create_item():
@@ -372,7 +380,7 @@ def edit_item(item_name, category_name=None):
         return redirect(url_for('show_homepage'))
 
     if login_session['user_id'] != item.user_id:
-        flash("You cannot delete other user's items.")
+        flash("You cannot edit other user's items.")
         category = session.query(Category).filter_by(id=item.category_id).one()
         category_name = category.name
         item_name = item.name
@@ -420,6 +428,7 @@ def edit_item(item_name, category_name=None):
                                categories=categories,
                                item=item)
 
+
 @app.route('/catalog/<item_name>/delete/', methods=['GET', 'POST'])
 def delete_item(item_name):
     """Delete a specified item from the database.
@@ -466,8 +475,7 @@ def delete_item(item_name):
                                item=item)
 
 # JSON endpoints for item catalog
-@app.route('/catalog/JSON/')
-@app.route('/catalog.json/')
+@app.route('/catalog/json/')
 def catalog_json():
     """Returns all the items in the catalog as a JSON file.
 
@@ -480,12 +488,12 @@ def catalog_json():
     categories = session.query(Category).all()
     serialised_catergories = [i.serialise for i in categories]
     session.close()
-    return jsonify(Category=serialised_catergories)
+    return jsonify(CategoryList=serialised_catergories)
 
-@app.route('/catalog/<category_name>/<item_name>/JSON/')
-@app.route('/catalog/<item_name>/JSON/')
+
+@app.route('/catalog/<category_name>/<item_name>/json/')
 def item_json(item_name, category_name=None):
-    """Returns a single item in a JSON file.
+    """Returns a single item for a specific category in a JSON file.
 
     Args:
         item_name (str): The name of the item to return in JSON format.
@@ -494,14 +502,41 @@ def item_json(item_name, category_name=None):
     """
     session = connect_database()
     try:
-        item = session.query(Item).filter_by(name=item_name).one()
+        category = session.query(Category).filter_by(name=category_name).one()
+        items = session.query(Item).filter_by(name=item_name).one()
     except NoResultFound:
         session.close()
         flash("JSON error: The item '%s' does not exist." % item_name)
         return redirect(url_for('show_homepage'))
 
     session.close()
-    return jsonify(Item=item.serialise)
+    return jsonify(ItemDetails=items.serialise)
+
+
+@app.route('/catalog/<category_name>/json/')
+def category_items_json(category_name=None):
+    """Returns all items for a specific category in a JSON file.
+
+    Args:
+        category_name (str): A dummy variable used so that the path can
+            optionally include the category name.
+    """
+    session = connect_database()
+    try:
+        category = session.query(Category).filter_by(name=category_name).one()
+        items = session.query(Item).filter_by(category=category)
+        serialise_items = [i.serialise for i in items]
+        print serialise_items
+
+    except NoResultFound:
+        session.close()
+        flash("JSON error: The items for category '%s' do not exist." %
+              category_name)
+        return redirect(url_for('show_homepage'))
+
+    session.close()
+    return jsonify(Item=serialise_items)
+
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'

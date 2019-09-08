@@ -11,8 +11,6 @@ You will need to install these following application in order to make this code 
 * [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 * [Vagrant](https://www.vagrantup.com/downloads.html)
 
-You will also need to download these following files to make it work.
-* [VM configuration](https://d17h27t6h515a5.cloudfront.net/topher/2017/August/59822701_fsnd-virtual-machine/fsnd-virtual-machine.zip)
 
 ## Project contents
 
@@ -31,7 +29,7 @@ This project consists for the following files in the `catalog` directory:
 ## How to run an application
 Download the project zip file to you computer and unzip the file  or clone this repository to your desktop.
 
-Navigate to the project directory. 
+Navigate to the project directory. You should see `Vagrantfile` there. Please follow below instruction to set up your virtual machine.
 
 ### Bringing the VM up
 Bring up the VM with the following command:
@@ -65,3 +63,23 @@ It then starts a web server that serves the application. To view the application
 ```
 http://localhost:8000/
 ```
+### JSON endpoints
+
+Additonally, this application has below JSON endpoints to get information from the catalog in JSON format.
+
+`/catalog/json/` - Returns all the items in the catalog as a JSON file. For example, 
+```
+http://localhost:8000/catalog/json/
+```
+
+`/catalog/<category_name>/<item_name>/json/` - Returns a single item for a specific category in a JSON file. For example, 
+```
+http://localhost:8000/catalog/Bakery/Chocolate%20cookies/json/ 
+```
+
+`/catalog/<category_name>/json/` - Returns all items for a specific category in a JSON file. For example, 
+
+```
+http://localhost:8000/catalog/Bakery/json/
+```
+
